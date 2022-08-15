@@ -33,7 +33,6 @@ use fvm_shared::econ::TokenAmount;
 // The following errors are particular cases of illegal state.
 // They're not expected to ever happen, but if they do, distinguished codes can help us
 // diagnose the problem.
-pub use beneficiary::*;
 use fil_actors_runtime::cbor::{deserialize, serialize, serialize_vec};
 use fil_actors_runtime::runtime::builtins::Type;
 use fvm_shared::error::*;
@@ -54,6 +53,7 @@ pub use state::*;
 pub use termination::*;
 pub use types::*;
 pub use vesting_state::*;
+pub use beneficiary::*;
 
 use crate::commd::{is_unsealed_sector, CompactCommD};
 use crate::Code::Blake2b256;
