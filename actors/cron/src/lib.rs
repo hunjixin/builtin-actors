@@ -64,12 +64,14 @@ impl Actor {
         let st: State = rt.state()?;
         for entry in st.entries {
             // Intentionally ignore any error when calling cron methods
+            log::info!("cron start addr {}, method num {}", entry.receiver, entry.method_num);
             let res = rt.send(
                 &entry.receiver,
                 entry.method_num,
                 RawBytes::default(),
                 TokenAmount::zero(),
             );
+            log::info!("cron end addr {}, method num {}", entry.receiver, entry.method_num);
             if let Err(e) = res {
                 log::error!(
                     "cron failed to send entry to {}, send error code {}",
