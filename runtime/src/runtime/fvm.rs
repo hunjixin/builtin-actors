@@ -18,6 +18,7 @@ use fvm_shared::sector::{
 };
 use fvm_shared::version::NetworkVersion;
 use fvm_shared::{ActorID, MethodNum};
+use log::LevelFilter;
 use num_traits::FromPrimitive;
 #[cfg(feature = "fake-proofs")]
 use sha2::{Digest, Sha256};
@@ -546,16 +547,15 @@ where
 /// 5b. In case of success, stores the return data as a block and returns the latter.
 pub fn trampoline<C: ActorCode>(params: u32) -> u32 {
     fvm::debug::init_logging();
+    log::set_max_level(LevelFilter::Debug);
 
     std::panic::set_hook(Box::new(|info| {
         fvm::vm::abort(ExitCode::USR_ASSERTION_FAILED.value(), Some(&format!("{}", info)))
     }));
 
     let method = fvm::message::method_number();
-    log::debug!("fetching parameters block: {}", params);
     let params = fvm::message::params_raw(params).expect("params block invalid").1;
     let params = RawBytes::new(params);
-    log::debug!("input params: {:x?}", params.bytes());
 
     // Construct a new runtime.
     let mut rt = FvmRuntime::default();
